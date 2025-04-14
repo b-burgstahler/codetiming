@@ -6,6 +6,9 @@ import math
 import statistics
 from typing import TYPE_CHECKING, Any, Callable, Dict, List
 
+# Third party imports
+import prettytable
+
 # Annotate generic UserDict
 if TYPE_CHECKING:
     UserDict = collections.UserDict[str, float]  # pragma: no cover
@@ -74,4 +77,49 @@ class Timers(UserDict):
         if name in self._timings:
             value = self._timings[name]
             return statistics.stdev(value) if len(value) >= 2 else math.nan
+        raise KeyError(name)
+
+    def __str__(self, name: str = None) -> str:
+        """String representation of the timers."""
+        table = prettytable.PrettyTable()
+        table.field_names = [
+            "Timer",
+            "Count",
+            "Total",
+            "Mean",
+            "Median",
+            "Max",
+            "Min",
+            "Stdev",
+            
+        ]
+        if name in self._timings:
+            table.add_row(
+                [
+                    name,
+                    self.count(name),
+                    self.total(name),
+                    self.mean(name),
+                    self.median(name),
+                    self.max(name),
+                    self.min(name),
+                    self.stdev(name),
+                ]
+            )
+            return table.get_string()
+        if name is None:
+            for timer_name in self._timings.keys():
+                table.add_row(
+                    [
+                        timer_name,
+                        self.count(timer_name),
+                        self.total(timer_name),
+                        self.mean(timer_name),
+                        self.median(timer_name),
+                        self.max(timer_name),
+                        self.min(timer_name),
+                        self.stdev(timer_name),
+                    ]
+                )
+            return table.get_string()
         raise KeyError(name)
