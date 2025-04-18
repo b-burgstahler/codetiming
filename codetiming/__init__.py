@@ -22,10 +22,10 @@ You can use `codetiming.Timer` in several different ways:
 """
 
 # Codetiming imports
-from codetiming._timer import Timer, TimerError
+from codetiming._timer import Timer, TimerError, fTimer
 
 # Use __all__ to let type checkers know what is part of the public API.
-__all__ = ["Timer", "TimerError"]
+__all__ = ["Timer", "fTimer", "TimerError"]
 
 # Versioning is handled by bump2version
 __version__ = "1.4.0"

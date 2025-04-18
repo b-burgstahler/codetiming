@@ -103,3 +103,21 @@ class Timer(ContextDecorator):
     def __exit__(self, *exc_info: Any) -> None:
         """Stop the context manager timer."""
         self.stop()
+
+
+class fTimer(Timer):
+    """
+    fTimer is a subclass of Timer that provides additional functionality for
+    formatting the output of the timer.
+
+    It is used to measure the execution time of code blocks and provides
+    methods to format the output in a more user-friendly way.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, func):
+        if self.name is None:
+            self.name = func.__name__
+        return super().__call__(func)
