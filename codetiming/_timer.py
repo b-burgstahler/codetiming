@@ -119,5 +119,7 @@ class fTimer(Timer):
 
     def __call__(self, func):
         if self.name is None:
-            self.name = func.__name__
+            # automatically name based on global import path (this way same named functions in different paths ignored)
+            # ie 'codetiming._timer.start'
+            self.name = func.__globals__["__name__"] + "." + func.__qualname__
         return super().__call__(func)
